@@ -1,30 +1,102 @@
-# ask for two nums
-# ask for operator
-# display the result
-
-puts "Enter a number:"
-num1 = gets.chomp.to_f
-
-puts "Enter another number:"
-num2 = gets.chomp.to_f
-
-puts "Enter the operation would you like to perform: 'add' 'subtract' 'multiply' or 'divide'" 
-operation = gets.chomp
-
-if operation == "add"
-  result = num1 + num2
-elsif operation == "subtract"
-  result = num1 - num2
-elsif operation == "multiply"
-  result = num1 * num2
-elsif operation == "divide"
-  result = num1 / num2
+def prompt(message)
+  Kernel.puts("=> #{message}")
 end
 
-puts "The answer is #{result}"
+def valid_number?(number)
+  number.to_i() != 0
+end
 
+def operation_to_message(op)
+  case op
+  when '1'
+    'Adding'
+  when '2'
+    'Subtracting'
+  when '3'
+    'Multiplying'
+  when '4'
+    'Dividing'
+  end
+end
 
+prompt("Welcome to Calculator! Enter your name:")
 
+name = ''
+loop do
+  name = Kernel.gets().chomp()
+  if name.empty?
+    prompt("You did not enter a valid name, try again.")
+  else
+    break
+  end
+end
 
+prompt("Hello #{name}!")
 
+loop do
+  number1 = ''
+  loop do 
+    prompt("What's the first number?")
+    number1 = Kernel.gets().chomp()
+    
+    if valid_number?(number1)
+      break
+    else
+      prompt("Please enter a valid number.")
+    end
+  end
+  
+  number2 = ''
+  loop do
+    prompt("What's the second number?")
+    number2 = Kernel.gets().chomp()
+    
+    if valid_number?(number2)
+      break
+    else
+      prompt("Please enter a valid number.")
+    end
+  end
+  
+  operator_prompt = <<-MSG
+    What operation would you like to perform?
+    1) add
+    2) subtract
+    3) multiply
+    4) divide
+  MSG
+  
+  prompt(operator_prompt)
+  
+  operator = ''
+  loop do
+    operator = Kernel.gets().chomp()
 
+    if %w(1 2 3 4).include?(operator)
+      break
+    else
+      prompt("Please enter 1, 2, 3, or 4")
+    end
+  end
+  
+  prompt("#{operation_to_message(operator)} the two numbers...")
+      
+  result = case operator
+            when '1'
+              number1.to_i() + number2.to_i()
+            when '2'
+              number1.to_i() - number2.to_i()
+            when '3'
+              number1.to_i() * number2.to_i()
+            when '4'
+              number2.to_f() / number2.to_f()
+            end
+  
+  prompt("The result is #{result}")
+  
+  prompt("Would you like to perform another calcuation? (If yes, enter 'Y')")
+  another_calc = Kernel.gets().chomp()
+  break unless another_calc.downcase.start_with?('y')
+end
+
+prompt("Thanks for using Calculator! Goodbye!")
