@@ -10,7 +10,12 @@ def prompt(message)
 end
 
 def valid_number?(number)
-  number.to_i != 0
+  number = number.to_i
+  if number.nil? || number <= 0
+    false
+  else
+    true
+  end
 end
 
 def apr_to_decimal(number)
@@ -18,9 +23,10 @@ def apr_to_decimal(number)
 end
 
 prompt("Welcome to Loan Calculator!")
+prompt("---------------------------")
 
 loop do
-  prompt("Enter the loan amount:")
+  prompt("Enter loan amount:")
   loan_amount = ''
   loop do
     loan_amount = gets.chomp
@@ -30,8 +36,8 @@ loop do
       prompt("Hmm... that's not a valid entry, please try again.")
     end
   end
-  loan_amount = loan_amount.to_i
-  prompt("Enter the Annual Percentage Rate (APR) as a whole number:")
+  prompt("Enter the Annual Percentage Rate (APR):")
+  prompt("(Example: 5 for 5% or 2.5 for 2.5%)")
   apr_input = ''
   loop do
     apr_input = gets.chomp
@@ -41,7 +47,6 @@ loop do
       prompt("Hmm... that's not a valid entry, please try again.")
     end
   end
-  annual_pr = apr_to_decimal(apr_input)
   prompt("Enter the loan duration in years:")
   duration_in_years = ''
   loop do
@@ -52,17 +57,18 @@ loop do
       prompt("Hmm... that's not a valid entry, please try again.")
     end
   end
-  duration_in_months = duration_in_years.to_i * 12
+  annual_pr = apr_to_decimal(apr_input)
   monthly_rate = annual_pr / 12
-  monthly_payment = loan_amount * (monthly_rate / (1 - (1 + monthly_rate)**(-duration_in_months)))
-  output = <<-MSG
-    For a loan of $#{loan_amount}, APR of #{annual_pr}%, over #{duration_in_years} years:
-    Your monthly interest rate is:   #{monthly_rate}
-    Your loan duration in months is: #{duration_in_months}
-    Your monthly payment is:         #{monthly_payment}  
-  MSG
-  prompt(output)
+  loan_amount = loan_amount.to_i
+  duration_in_months = duration_in_years.to_i * 12
+  monthly_payment = loan_amount *
+                    (monthly_rate /
+                    (1 - (1 + monthly_rate)**(-duration_in_months)))
+  prompt("Your monthly payment is: #{monthly_payment.round(2)}")
   prompt("Enter Y to perform another loan calcuation or any key to exit:")
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
+
+prompt("Thanks for using Loan Calculator!")
+prompt("Good bye!")
