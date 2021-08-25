@@ -56,7 +56,7 @@ loop do
   end
   
   computer_choice = VALID_CHOICES.sample
-  
+  system "clear"
   prompt("You chose: #{choice}; Computer chose: #{computer_choice}")
   
   display_results(choice, computer_choice)
