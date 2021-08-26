@@ -13,7 +13,7 @@ def initialize_deck
   deck = []
   faces.each do |face|
     suits.each do |suit|
-      deck << "#{face} of #{suit}"
+      deck << "#{face} of #{suit}"  # re-factor code to have each face point to integer?
     end
   end
   deck
@@ -42,9 +42,24 @@ end
 
 def get_hand_value(hand)
   sum = 0
-  hand.each do |crd|
-    sum += get_card_value(crd)
+  hand.each do |card|
+    sum += get_card_value(card)
   end
+  
+  num_aces_in_hand = 0
+  hand.each do |card|
+    if card.start_with?("A")
+      num_aces_in_hand += 1
+    end
+  end
+  
+  while sum > 21 &&
+    num_aces_in_hand != 0
+    num_aces_in_hand -= 1
+    sum -= 10
+    break if num_aces_in_hand == 0
+  end
+  
   sum
 end
 
@@ -68,7 +83,6 @@ def player_option(deck)
   end
 end
 
-
 def dealer_option(deck)
   prompt("Dealer shows #{DEALER_HAND[0]} and #{DEALER_HAND[1]}.")
   
@@ -80,7 +94,6 @@ def dealer_option(deck)
   end
 end
 
-
 def busted?(hand)
   if get_hand_value(hand) > 21
     return true
@@ -88,7 +101,6 @@ def busted?(hand)
     return false
   end
 end
-
 
 def deal_another_card(deck) #returns card from current_deck
   deck.pop
@@ -106,7 +118,6 @@ def compare_hands(hand1, hand2)
     prompt("DEALER WINS!")
   end
 end
-
 
 loop do
   system "clear"
@@ -147,14 +158,3 @@ loop do
 end
 
 prompt("Thanks for playing Twenty-One!")
-  
- 
-  
- 
-  
-
-    
-  
-  
-
-
