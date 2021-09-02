@@ -1,14 +1,11 @@
-
-# rubocop:disable Style/GlobalVars
 MAX_WINS = 5
-
-game_data = { player: {hand: [],
-                       total: 0,
-                       score: 0},
-              dealer: {hand: [],
-                       total: 0,
-                       score: 0}
-             }                        
+# game_data = { player: {hand: [],
+#                        total: 0,
+#                        score: 0},
+#               dealer: {hand: [],
+#                        total: 0,
+#                        score: 0}
+#              }
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -39,7 +36,7 @@ def welcome
   prompt("Dealer must hit (add a card) on 16 or less.")
   prompt("Numbered cards are thier own value. (i.e. 7 of hearts = 7)")
   prompt("J = Jack, K = King, Q = Queen are worth 10 a peice.")
-  prompt("A = Ace is worth 1 or 11")
+  prompt("A = Ace is worth 1 or 11.")
   prompt("The first to win 5 rounds is the winner!")
   prompt("Press Enter to start!")
   gets
@@ -57,7 +54,7 @@ end
 def get_card_value(card)
   if card[0].to_i != 0
     card[0].to_i
-  elsif ["J", "Q", "K"].include?(card[0]) 
+  elsif ["J", "Q", "K"].include?(card[0])
     10
   elsif card[0] == "A"
     11
@@ -105,7 +102,8 @@ end
 # rubocop:enable Metrics/MethodLength
 
 def dealer_option(deck, hand)
-  prompt("Dealer shows (#{card_to_string(hand[0])}) and (#{card_to_string(hand[1])}).")
+  prompt("Dealer shows (#{card_to_string(hand[0])})\
+ and (#{card_to_string(hand[1])}).")
   while get_hand_value(hand) < 17
     hand << deal_another_card(deck)
     prompt("Dealer hits and (#{card_to_string(hand[-1])}) was added to hand.")
@@ -123,23 +121,18 @@ def deal_another_card(deck) # returns card from current_deck
   deck.pop
 end
 
-def reset_score(score)
-  score = 0
-end
-
-# rubocop:disable Layout/LineLength
 def compare_hands(p_total, d_total)
   prompt("You have #{p_total}. Dealer has #{d_total}.")
   if p_total > d_total &&
      p_total <= 21 &&
      d_total <= 21
     prompt("YOU WIN!")
-    return "player"
+    "player"
   elsif p_total == d_total
     prompt("IT'S A DRAW!")
   else
     prompt("DEALER WINS!")
-    return "dealer"
+    "dealer"
   end
 end
 
@@ -175,19 +168,18 @@ def play_again?
   end
 end
 
-# rubocop:enable Layout/LineLength
-
 system "clear"
 welcome
 
-player_hand = game_data[:player][:hand]
-player_score = game_data[:player][:score]
-player_total = game_data[:player][:total]
+player_hand = []
+player_score = 0
+player_total = 0
 
-dealer_hand = game_data[:dealer][:hand]
-dealer_score = game_data[:dealer][:score]
-dealer_total = game_data[:dealer][:total]
+dealer_hand = []
+dealer_score = 0
+dealer_total = 0
 
+# rubocop:disable Layout/TrailingWhitespace
 loop do
   system "clear"
 
@@ -196,10 +188,9 @@ loop do
   current_deck = initialize_deck
   shuffle(current_deck)
   deal_cards(current_deck, player_hand, dealer_hand)
-  
-  
   prompt("Dealer has (#{card_to_string(dealer_hand[0])}) and an unknown card.")
-  prompt("You have (#{card_to_string(player_hand[0])}) and (#{card_to_string(player_hand[1])}).")
+  prompt("You have (#{card_to_string(player_hand[0])})\
+ and (#{card_to_string(player_hand[1])}).")
   prompt("")
   
   player_option(current_deck, player_hand)
@@ -235,8 +226,8 @@ loop do
   
   if game_over?(player_score, dealer_score)
     win_prompt(player_score, dealer_score)
-    player_score = reset_score(player_score)
-    dealer_score = reset_score(dealer_score)
+    player_score = 0
+    dealer_score = 0
   end
   
   if play_again? == "y"
@@ -249,6 +240,5 @@ loop do
     break
   end
 end
-
+# rubocop:enable Layout/TrailingWhitespace
 prompt("Thanks for playing Twenty-One!")
-# rubocop:enable Style/GlobalVars
